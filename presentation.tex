@@ -1,0 +1,192 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{spruce}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Infectious Disease Spread Simulation}
+\subtitle{KD-Tree Optimized Graph-Based Modeling}
+\author{Your Name Here}
+\institute{Design and Analysis of Algorithms}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\section{Introduction}
+\begin{frame}{Introduction}
+\begin{itemize}
+    \item Real-time simulation of disease spread through social interactions
+    \item Graph-based approach modeling human connections and proximity
+    \item Optimized using KD-trees for efficient spatial queries
+    \item Goal: Create realistic model while maintaining computational efficiency
+\end{itemize}
+
+\vspace{0.5cm}
+\begin{center}
+    \framebox{\includegraphics[width=0.7\textwidth]{screenshot1.png}}\\
+    \small{Simulation showing healthy (green), infected (red),\\ quarantined (purple), and recovered (blue) individuals}
+\end{center}
+\end{frame}
+
+\section{System Architecture}
+\begin{frame}{System Architecture}
+\textbf{Components:}
+\begin{itemize}
+    \item \textbf{Graph Model}: Social network with family, social, and random connections
+    \item \textbf{Spatial Engine}: KD-tree optimized position tracking 
+    \item \textbf{Disease Model}: State-based infection logic
+    \item \textbf{Visualization}: Real-time animation and statistics
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Disease States:}
+\begin{itemize}
+    \item Healthy → Infected → Detected → Recovered
+    \item Each state transition follows probabilistic rules
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{center}
+    \framebox{\includegraphics[width=0.6\textwidth]{architecture.png}}\\
+    \small{Component interaction diagram}
+\end{center}
+\end{frame}
+
+\section{Algorithmic Optimizations}
+\begin{frame}{Algorithmic Optimizations}
+\textbf{Challenge: Performance Bottleneck}
+\begin{itemize}
+    \item Initial proximity checking: O(n²) complexity
+    \item Quadratic scaling made large simulations impractical
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Solution: KD-Tree Spatial Partitioning}
+\begin{itemize}
+    \item Reduced proximity queries from O(n²) to O(n log n)
+    \item Enables efficient radius-based neighbor finding
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{KD-Tree Implementation in Movement}
+\begin{lstlisting}[language=Python]
+# Key optimization in movement.py
+def update_positions(G, positions, velocities, recovered):
+    # Create KD-Tree for efficient spatial queries
+    node_list = list(G.nodes())
+    pos_array = np.array([positions[n] for n in node_list])
+    tree = KDTree(pos_array)
+    
+    # Find nearby nodes in O(log n) time instead of O(n)
+    nearby_idxs = tree.query_ball_point(pos, repulsion_radius)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{KD-Tree Implementation in Infection Logic}
+\begin{lstlisting}[language=Python]
+# Key optimization in infection.py
+def update_infection(G, positions, infected, ...):
+    # Build KDTree for fast radius queries
+    pos_array = np.array([positions[n] for n in all_nodes])
+    tree = KDTree(pos_array)
+
+    # Query all neighbors within infection radius - O(log n)
+    neighbors = tree.query_ball_point(pos, INFECTION_RADIUS)
+\end{lstlisting}
+\end{frame}
+
+\section{Model Implementation}
+\begin{frame}{Model Implementation}
+\textbf{Social Structure:}
+\begin{itemize}
+    \item Family connections (high infection probability: 15\%)
+    \item Social connections (medium probability: 5\%)
+    \item Proximity-based transmission within 10 units
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Infection \& Recovery Logic:}
+\begin{itemize}
+    \item Time-based recovery (23 simulated hours)
+    \item Delayed detection (4-6 days)
+    \item Quarantine option for detected cases
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{center}
+    \framebox{\includegraphics[width=0.6\textwidth]{network.png}}\\
+    \small{Visualization showing infection spread network patterns}
+\end{center}
+\end{frame}
+
+\section{Results \& Conclusions}
+\begin{frame}{Results \& Conclusions}
+\textbf{Experimental Observations:}
+\begin{itemize}
+    \item Baseline (No intervention): Rapid spread through \textasciitilde80\% of population
+    \item With quarantine: Moderate reduction in infections
+    \item With social distancing (increased repulsion): Significant reduction
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Key Findings:}
+\begin{itemize}
+    \item KD-tree optimization reduced complexity from O(n²) to O(n log n)
+    \item Enabled simulation of larger populations (300+ individuals)
+    \item Social distancing more effective than reactive quarantine
+\end{itemize}
+
+\begin{center}
+    \framebox{\includegraphics[width=0.7\textwidth]{results.png}}\\
+    \small{Comparison graph showing infection curves under different scenarios}
+\end{center}
+\end{frame}
+
+\begin{frame}{Thank You!}
+\begin{center}
+    \Large{Thank you for your attention!}
+    
+    \vspace{0.8cm}
+    \framebox{\includegraphics[width=0.8\textwidth]{final.png}}\\
+    \small{Final simulation state showing disease progression}
+
+    \vspace{0.8cm}
+    \normalsize{Questions?}
+\end{center}
+\end{frame}
+
+\end{document}
