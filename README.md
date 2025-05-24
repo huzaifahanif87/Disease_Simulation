@@ -5,20 +5,20 @@ This project simulates the spread of an infectious disease (like COVID-19) throu
 ## 🚀 Features
 
 - 👪 **Three-Tier Social Structure**: Nodes (individuals) belong to:
-  - **Family Tier**: High infection probability (30%)
-  - **Cross-Family Tier**: Medium infection probability (20%)
-  - **Social Tier**: General interactions with moderate probability (30%)
+  - **Family Tier**: High infection probability (15%)
+  - **Cross-Family Tier**: Medium infection probability (5%)
+  - **Social Tier**: General interactions with moderate probability (3%)
 
 - 📍 **Location-Based Infection**:
   - Infection spreads only within a specified proximity using KDTree (`< 10 units`)
-  - 10% chance of infection if susceptible within range
+  - chance of infection only if susceptible within range
 
 - 🔄 **Dynamic Movement**:
   - Nodes move based on a physics-inspired force-directed layout
-  - Recovered individuals are fixed (do not move)
+  - Initial velocities also added to make more realistic movement
 
 - ⏱ **Time-Based Simulation**:
-  - Recovery occurs 8 hours (480 frames) after infection
+  - Recovery occurs 23 hrs after infection (9-10 frames)
   - Reinfection chance is very low (0.1%)
 
 - 📊 **Live Visualization**:
